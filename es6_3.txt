@@ -1,0 +1,315 @@
+块级声名 
+	块级声明也就是让所声明的变量在指定块的作用域外无法被访问
+	在以下条件创建
+		1. 在一个函数内部
+		2. 在一个代码块（由一对花括号包裹）内部
+			
+		
+	let声名：
+		会将变量的作用域限制在当前代码块中
+		声明并不会被提升到当前代码块的顶部
+		同一个作用域内禁止重复声明
+		
+	const(常量)声名:
+		会将变量的作用域限制在当前代码块中
+		声明并不会被提升到当前代码块的顶部
+		同一个作用域内禁止重复声明
+		被设置完成后就不能再被改变 除对象外（声名的对象的属性可以改变）
+		const变量都需要在声明时进行初始化
+		
+
+	暂时性死区(temporal dead zone , TDZ ):
+		使用 let 或 const 声明的变量，在达到声明处之前都是无法访问的，试图访问会导致一个引用错误
+		
+	循环中的块级绑定
+	for (let i = 0; i < 10; i++) {
+		...
+	}
+	console.log(i);// i 在此处不可访问，抛出错误
+	
+	循环内的 let 声明
+	
+		var oLi = document.querySelectorAll('li');
+		for(let i =0;i<oLi.length;i++){
+			oLi[i].onclick=function(){
+				alert(i);//这里 弹出的 i 是 0,1,2,3,4
+			}
+		}
+
+	全局块级绑定
+		在全局作用域上使用 let 或 const ，虽然在全局作用域上会创建新的绑定，
+		但不会有任何属性被添加到全局对象上。
+		当你不想在全局对象上创建属性时，这种特性会让 let 与 const 在全局作用域中更安全
+		
+    数组的拓展
+			Array.of() 方法 
+				该方法的作用非常类似 Array 构造器，但在
+				使用单个数值参数的时候并不会导致特殊结果。 Array.of() 方法总会创建一个包含所有传
+				入参数的数组，而不管参数的数量与类型。
+
+			Array.from() 方法
+				将可迭代对象或者类数组对象作为第一个参数传入， Array.from() 就能返回一个真正的数组
+				
+			find() 和findIndex()
+			这两个原型方法都有一个回调函数作为参数回调函数的参数依次为元素、索引、数组引用，与ES5数组方法相同）
+			find()会返回第一个满足条件的元素
+			findIndex()会返回第一个满足条件的索引
+			没有找到都会返回-1
+			这里满足条件意思就是函数参数返回值为true
+			
+	数组解构
+		数组解构时，解构作用在数组内部的位置上
+			let colors = ['red','green','black'];
+			let [b,c,d]=colors;
+	    交换变量的值
+	    		b 与 a 的值分别被复制到
+			临时数组的第一个与第二个位置，并对该数组进行解构，结果两个变量就互换了它们的值
+	    		let a=4,b=5;
+			[a,b]=[b,a];
+		默认值
+			let colors = [ "red" ];
+			let [ firstColor, secondColor = "green" ] = colors;
+		剩余项
+			let colors = [ "red", "green", "blue" ];
+			let [ firstColor, ...restColors ] = colors;
+		嵌套的解构
+			let colors = [ "red", [ "green", "lightgreen" ], "blue" ];
+			let [ firstColor, [ secondColor ] ] = colors;
+			console.log(firstColor); // "red"
+			console.log(secondColor); // "green"
+	对象解构
+	    
+		ES6 的解构实际使用的语法其实你早已熟悉，那就是对象与数组的字面量语法。
+			let node={
+					type:'element',
+					name:'BUTTON'
+				}
+			let {type,name}=node;
+		 	type 与 name 标识符既声明了本地变量，也读取了对象的相应属性值。
+		
+		// 使用解构来分配不同的值
+		({ type, name } = node);//解构表达式
+		console.log(type); // "Identifier"
+		console.log(name); // "foo"
+		解构默认值
+			let node = {
+			type: "Identifier",
+			name: "foo"
+			};
+			let { type, name, value = true } = node;
+			
+			选择性地定义一个默认值，以便在指定属性不存在时使用该值。
+			var {x = 3} = {x: undefined};
+			x // 3
+			var {x = 3} = {x: null};
+			x // null
+
+		
+		嵌套的对象解构
+			let node = {
+				type: "Identifier",
+				name: "foo",
+				loc: {
+					start: {
+					line: 1,
+					column: 1
+					}
+				}
+			};
+			let { loc: { start }} = node;
+			// 提取 node.loc.start
+			//let { loc: { start: localStart }} = node;
+			//在对象的嵌套解构中同样能为本地变量使用不同的名称
+			console.log(start.line); // 1
+			console.log(start.column); // 1
+			每当有一个冒号在解构模式中出现，就意味着冒号之前
+			的标识符代表需要检查的位置，而冒号右侧则是赋值的目标。当冒号右侧存在花括号时，表
+			示目标被嵌套在对象的更深一层中。
+		
+		参数解构
+			function setCookie(name, value, { secure, path, domain, expires }) {
+			// 设置 cookie 的代码
+			}
+			setCookie("type", "js", {
+				secure: true,
+				expires: 60000
+			});
+			此函数的行为类似上例，但此时第三个参数使用了解构来抽取必要的数据。现在对于
+			setCookie() 函数的使用者来说，解构参数之外的参数明显是必需的；而可选项目存在于额
+			外的参数组中，这同样是非常明确的；同时，若使用了第三个参数，其中应当包含什么值当
+			然也是极其明确的。解构参数在没有传递值的情况下类似于常规参数，它们会被设为undefined 
+		字符串解构
+			字符串也可进行解构赋值，因为此时的字符串被转换成了类数组的对象，模式能够匹配起来，如
+			let [a, b] = 'str';
+			a // s
+			b // t
+		
+		字符串的新方法
+			includes() 方法，在给定文本存在于字符串中的任意位置时会返回 true ，否则返回false ；
+			startsWith() 方法，在给定文本出现在字符串起始处时返回 true ，否则返回 false ；
+			第二个参数是一个数字，代表开始的下标
+			endsWith() 方法，在给定文本出现在字符串结尾处时返回 true ，否则返回 false 。
+			第二个参数是一个数字，代表开始的下标
+			repeat:，它接受一个参数作为字符串的重复次数，返回一个将初始字符串重复指定次数的新字符串
+			padStart()用于头部补全，一共接受两个参数，第一个参数用来指定字符串的最小长度，第二个参数是用来补全的字符串
+			padEnd()用于尾部补全。一共接受两个参数，第一个参数用来指定字符串的最小长度，第二个参数是用来补全的字符串
+			注意：如果省略第二个参数，默认使用空格补全长度
+			
+		摸板字符串
+			1.多行字符串：针对多行字符串的形式概念；
+			2.基本的字符串格式化：将字符串部分替换为已存在的变量值的能力；
+			注意：如果在模板字符串中需要使用反引号，则前面要用反斜杠转义。
+			$('#result').append(`
+  				There are <b>${basket.count}</b> items
+   				in your basket, <em>${basket.onSale}</em>
+  				are on sale!
+			`);
+			
+		函数：
+			1.允许为函数的参数设置默认值，即直接写在参数定义的后面
+			function log(x, y = 'World') {
+  				console.log(x, y);
+			}
+			log('Hello') // Hello World
+			log('Hello', 'China') // Hello China
+			log('Hello', '') // Hello
+			注意：使用参数默认值时，函数不能有同名参数。
+			// 不报错
+			function foo(x, x, y) {
+  			// ...
+			}
+			// SyntaxError: Duplicate parameter name not allowed in this context
+			
+			2.参数默认值可以与解构赋值的默认值，结合起来使用。
+			function foo({x, y = 5}) {
+  				console.log(x, y);
+			}
+			foo({}) // undefined 5
+			foo({x: 1}) // 1 5
+			foo({x: 1, y: 2}) // 1 2
+			foo() // TypeError: Cannot read property 'x' of undefined
+			这里没有指定默认值，所以没有参数的时候 解构的是 undefined
+			function foo({x, y = 5} = {}) {
+  				console.log(x, y);
+			}
+			foo() // undefined 5 
+			这里 没有参数时 使用默认参数 {}  相当于{x, y = 5} 解构 {}
+			
+			3.指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。
+			也就是说，指定了默认值后，length属性将失真。
+			(function (a) {}).length // 1
+			(function (a = 5) {}).length // 0
+			(function (a, b, c = 5) {}).length // 2
+			
+			4.剩余参数rest
+			rest 参数（形式为...变量名），用于获取函数的多余参数，这样就不需要使用arguments对象了。
+			rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+			5.函数的name属性，返回该函数的函数名。
+			function foo() {}
+			foo.name // "foo"
+			const bar = function baz() {};
+			// ES6
+			bar.name // "baz"
+			
+			6.箭头函数
+			let f = v => v  // let 函数名 = 参数 =>返回值
+			等同于let function f(v){return v}
+			如果箭头函数不需要参数或需要多个参数，就使用一个圆括号代表参数部分。
+			var f = () => 5;
+			等同于var f = function () { return 5 };
+			
+			箭头函数有几个使用注意点。
+			（1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+			（2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+			（3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+			
+		set 
+			1.ES6 提供了新的数据结构 Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。
+			add(value)：添加某个值，返回Set结构本身。
+			delete(value)：删除某个值，返回一个布尔值，表示删除是否成功。
+			has(value)：返回一个布尔值，表示该值是否为Set的成员。
+			clear()：清除所有成员，没有返回值。
+			size：set成员总数
+		
+		map
+			1.它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+			const m = new Map();
+			const o = {p: 'Hello World'};
+			m.set(o, 'content')
+			m.get(o) // "content"
+			m.has(o) // true
+			m.delete(o) // true
+			set()添加键值对
+			has()判断是否包含键
+			delete()删除键
+			size()成员个数
+			clear()清空成员
+			2.作为构造函数，Map 也可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组。
+			const map = new Map([
+			['name', '张三'],
+  			['title', 'Author']
+			]);
+
+			map.size // 2
+			map.has('name') // true
+			map.get('name') // "张三"
+			map.has('title') // true
+			map.get('title') // "Author"
+			
+		Symbol
+		表示独一无二的值。它是 JavaScript 语言的第七种数据类型
+		用途：你使用了一个他人提供的对象，但又想为这个对象添加新的方法（mixin 模式），
+		新方法的名字就有可能与现有方法产生冲突。symbol可以保证每个属性的名字都是独一无二的	
+		var mySymbol = Symbol();
+// 		程序员A
+//		var a = {};
+//		var mySymbol = Symbol();
+//		a[mySymbol] = 'Hello!';
+//		// 程序员B
+//		var  mySymbol = Symbol();
+//		a[mySymbol] = 'Hello es6!';
+//		console.log(a);
+		
+		
+		class
+		//定义类
+		class Point {
+  			constructor(x, y) {
+    			this.x = x;
+    			this.y = y;
+  			}
+
+  			toString() {
+    			return '(' + this.x + ', ' + this.y + ')';
+  			}
+		}
+		
+		static静态方法
+		如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。		
+		
+		继承
+		class P{
+			constructor(name){//构造器
+				this.name=name;
+			}
+			say(){//写在构造器外部的 方法 会添加到原型上
+				alert(this.name)
+			}
+			static sayHello(){ //静态方法 不会被实例继承
+				alert('hello');
+			}
+		}
+		var p = new P('zs');
+		class S extends P{ //通过extends关键字 继承
+			constructor(name,salary){
+				super(name);    //相当于call()方法   必须在构造器的第一行
+				this.salary=salary;
+			}
+		}
+		var s = new S('ls',10000);
+		console.log(s);
+		
+			
+			
+
+
