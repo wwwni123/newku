@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%; }
+
+@keyframes bannerMove {
+  0% {
+    top: -100%; }
+  100% {
+    top: 0%; } }
+@keyframes feiji {
+  0% {
+    width: 5px; }
+  50% {
+    width: 200px; }
+  100% {
+    width: 5px; } }
+.wrapper {
+  position: relative;
+  left: 10%;
+  width: 80%;
+  height: 100%;
+  overflow: hidden; }
+  .wrapper .banner {
+    position: absolute;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    animation: bannerMove 5s linear infinite; }
+    .wrapper .banner li {
+      width: 100%;
+      height: 100%; }
+      .wrapper .banner li img {
+        width: 100%;
+        height: 100%; }
+  .wrapper .feiji {
+    width: 20%;
+    position: absolute;
+    left: 40%;
+    top: 90%; }
+    .wrapper .feiji img {
+      width: 100%; }
+  .wrapper .paodan {
+    width: 100px;
+    position: absolute; }
+  .wrapper .diji {
+    position: absolute;
+    opacity: 0;
+    width: 50px;
+    animation: feiji 10s infinite; }
+  .wrapper .zha {
+    position: absolute; }
+
+/*# sourceMappingURL=index.css.map */
